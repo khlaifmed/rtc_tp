@@ -28,7 +28,7 @@ client_socket.onopen = async () => {
         if(msg_server.type==='chat_message'){
             let chat_messages=document.getElementById('chat-messages');
             chat_messages.innerHTML+=`<div class="message user2">
-            <div class="first">User2</div>
+            <div class="first">correspondant</div>
             <div class="message-content ">${msg_server.message}</div> 
             </div>`;
         }
@@ -41,6 +41,8 @@ let start_btn = document.getElementById('start');
 let chat_btn = document.getElementById('chat');
 let close= document.getElementById('close');
 let send=document.getElementById('send');
+let audio_btn = document.getElementById('audio');
+let video_btn = document.getElementById('video');
 
 
 let local_stream;
@@ -126,31 +128,41 @@ init();
 
 
 let show_chat=()=>{
-    document.getElementById('chat-box').style.display='block'
-
+    let chatBox = document.getElementById('chat-box');
+    chatBox.classList.toggle('show');
 }
 
 let send_message=()=>{
-    let message=document.getElementById('chat-input').value;
-    client_socket.send(JSON.stringify({"type":"chat_message","message":message,"userid":userid}));
-    let chat_messages=document.getElementById('chat-messages');
+    
+    const chatInput = document.getElementById('chat-input');
+    const message = chatInput.value.trim();
 
-    
-    chat_messages.innerHTML+=`<div class="message user1">
-        <div class="first">Moi</div>
-        <div class="message-content ">${message}</div> 
-        </div>`;
-    document.getElementById('chat-input').value="";
+    if (message !== '') {
+         client_socket.send(JSON.stringify({ "type": "chat_message", "message": message, "userid": userid }));
 
-    chat_messages.scrollTop=chat_messages.scrollHeight;
-    
-    
+         const chatMessages = document.getElementById('chat-messages');
+         const newMessage = document.createElement('div');
+         newMessage.classList.add('message', 'user1');
+    newMessage.innerHTML = `
+      <div class="first">Moi</div>
+      <div class="message-content">${message}</div>
+    `;
+    chatMessages.appendChild(newMessage);
+    chatInput.value = '';
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 
 }
-
+}
 chat_btn.addEventListener('click', show_chat);
 start_btn.addEventListener('click', start);
+audio_btn.addEventListener('click', () => {
+    local_stream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
+});
+video_btn.addEventListener('click', () => { 
+    local_stream.getVideoTracks().forEach(track => track.enabled = !track.enabled);
+});
 close.addEventListener('click',()=>{
-    document.getElementById('chat-box').style.display='none'
+    document.getElementById('chat-box').classList.remove('show');
 });
 send.addEventListener("click",send_message)
